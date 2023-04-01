@@ -4,7 +4,17 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
- * Make one of the symbols WILD
+ * TODO: Check payouts involving WILD symbol
+ * TODO: What would you do to make this code more readable?
+ * TODO: Run game 10,000 times and collect statistics:
+ *          total amounts spent and won
+ *          RTP (what percentage of the total cost do you win back)
+ *          Average value of a win
+ *          Print to console in a readable format
+ * TODO: Note any bugfixes made
+ * TODO: Convert primitives to Generics
+ * TODO: How many wins for each symbol, and of what length (i.e. 3,4 or 5 of a kind)
+ * TODO: Use streams
  */
 public class ReelsGame {
 
@@ -64,30 +74,24 @@ public class ReelsGame {
      * @return
      */
     public String GetResponse(){
+        // Decide where the reels are going to stop
         for(int i=0; i<5; i++){
             m_nStops[i] = m_cRng.nextInt(Reels.length);
         }
-        
+
+        // Build a display
         for(int i=0; i<5; i++){
             for(int j=0; j<3; j++){
                 Display[i][j] = Reels[i][m_nStops[i]+j];
             }
         }
 
-        System.out.println(System.lineSeparator() + "Reels:");
-        for(int row=0; row<3; row++){
-            String sMsg = "";
-            for(int col=0;col<5;col++){
-                sMsg += Display[col][row] + ",";
-            }
-            System.out.println(sMsg.substring(0,sMsg.length()-1));
-        }
+        PrintDisplay();
 
+        // Collect any wins
         // TODO: Use Symbol '12' as a WILD symbol
         // TODO: Get the average number of wins per spin
         for(int [] payline : PayLines){
-            // If the symbols on the Display in the pattern provided by this payline match,
-            // it's a win if that number of symbols in a line pays > 0 (see PayTable)
             // Example:
             int count = 0;
             int startSymbol = Display[0][payline[0]];
@@ -107,6 +111,17 @@ public class ReelsGame {
         
         return String.valueOf(m_nTotalWin);
     }
-    
-    
+
+    private void PrintDisplay() {
+        System.out.println(System.lineSeparator() + "Reels:");
+        for(int row=0; row<3; row++){
+            String sMsg = "";
+            for(int col=0;col<5;col++){
+                sMsg += Display[col][row] + ",";
+            }
+            System.out.println(sMsg.substring(0,sMsg.length()-1));
+        }
+    }
+
+
 }

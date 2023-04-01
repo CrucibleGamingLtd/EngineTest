@@ -9,7 +9,7 @@ public class Main {
         int totWin = 0;
         int totCost = 0;
 
-        for(int i=0;i<1000;i++){
+        for(int i=0;i<100000;i++){
             totCost += 100;
             totWin += Integer.parseInt(reelsGame.GetResponse());
         }
