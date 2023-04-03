@@ -80,7 +80,7 @@ public class ReelsGame {
                         .flatMapToInt(Arrays::stream)
                         .filter(num -> num == SCATTER)
                         .count());
-                numberOfPlays = wildcount >= 3 ? 11 : 1;
+                numberOfPlays = wildcount >= 3 ? 6 : 1;
             }
 
             // Evaluate winlines

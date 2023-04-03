@@ -13,7 +13,7 @@ public class Main {
      *          Average value of a win
      *          Percentage of winning spins
      *          Print to console in a readable format
-     *          How many wins for each symbol, and of what length (i.e. 3,4 or 5 of a kind)
+     *          How many wins for each symbol, and of what length (i.e. 2, 3, 4 or 5 of a kind)
      * @param args String[]
      */
     public static void main(String[] args) {
