@@ -14,7 +14,7 @@ import java.util.Random;
  * TODO: Stretch target 4: Employ java streams
  */
 public class ReelsGame {
-    private Random m_cRng = new Random(123);
+    private Random m_cRng = new Random(123); // Do not change this line
 
     private int[][] Reels = {
             {0, 2, 3, 1, 5, 8, 0, 6, 1, 2, 4, 1, 0, 10, 2, 5, 4, 7, 6, 8, 1, 7, 2, 9, 4, 2, 0, 3, 4, 5, 0, 8, 4, 0, 3, 6, 1, 2, 10, 6, 8, 1, 2, 9, 4, 2, 1, 3, 4, 0, 9, 3, 0, 4, 3, 0, 1, 1, 0, 2, 3, 4, 2, 3, 4, 2, 1, 3, 7, 0, 3, 1, 2, 3, 0, 1, 5},
