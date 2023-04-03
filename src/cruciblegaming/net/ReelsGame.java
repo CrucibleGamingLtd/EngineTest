@@ -1,6 +1,4 @@
 package cruciblegaming.net;
-
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -17,12 +15,6 @@ import java.util.Random;
  * TODO: Use streams
  */
 public class ReelsGame {
-
-    private int m_nTotalWin;
-
-    public ReelsGame() {
-        m_nTotalWin = 0;
-    }
 
     private int[][] Reels = {
             {0, 2, 3, 1, 5, 8, 0, 6, 1, 2, 4, 1, 0, 10, 2, 5, 4, 7, 6, 8, 1, 7, 2, 9, 4, 2, 0, 3, 4, 5, 0, 8, 4, 0, 3, 6, 1, 2, 10, 6, 8, 1, 2, 9, 4, 2, 1, 3, 4, 0, 9, 3, 0, 4, 3, 0, 1, 1, 0, 2, 3, 4, 2, 3, 4, 2, 1, 3, 7, 0, 3, 1, 2, 3, 0, 1, 5},
@@ -67,43 +59,40 @@ public class ReelsGame {
      * @return
      */
     public String playGame() {
-        m_nTotalWin = 0;
+        String sWinString = "";
+
         // Decide where the reels are going to stop
         for (int i = 0; i < 5; i++) {
-            m_nStops[i] = m_cRng.nextInt(Reels.length);
+            m_nStops[i] = m_cRng.nextInt(Reels[i].length);
         }
 
         // Build a display
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 3; j++) {
-                Display[i][j] = Reels[i][m_nStops[i] + j];
+                Display[i][j] = Reels[i][(m_nStops[i] + j)%Reels[i].length];
             }
         }
 
-        PrintDisplay();
+//        PrintDisplay();
 
-        // Collect any wins
-        // TODO: Use Symbol '12' as a WILD symbol
-        // TODO: Get the average number of wins per spin
+        // TODO: Use Symbol '10' as a WILD symbol and re-run
         for (int[] payline : PayLines) {
             // Example:
             int count = 0;
             int startSymbol = Display[0][payline[0]];
             for (count = 0; count < payline.length; count++) {
-                if (Display[count][payline[count]] != startSymbol && Display[count][payline[count]] != 12) {
+                if (Display[count][payline[count]] != startSymbol) {
                     break;
                 }
             }
             int win = PayTable[startSymbol][count - 1];
             if (win > 0) {
-                // TODO: Refactor this win data into a useful class
-                System.out.println("PayLine is " + Arrays.toString(payline));
-                System.out.println("Symbol: " + startSymbol + " Count: " + count + " Payout: " + PayTable[startSymbol][count - 1]);
-                m_nTotalWin += win;
+                // TODO: Refactor this win data into a more useful class
+                sWinString += startSymbol + "," + count + "," + win + "&";
             }
         }
 
-        return String.valueOf(m_nTotalWin);
+        return sWinString;
     }
 
     private void PrintDisplay() {
