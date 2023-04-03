@@ -24,6 +24,7 @@ public class Main {
         double winSpins = 0;
         HashMap<String, HashMap<String,Integer>> wins = new HashMap<>();
 
+
         for(int i=0;i<1000000;i++){
             totCost += bet;
 

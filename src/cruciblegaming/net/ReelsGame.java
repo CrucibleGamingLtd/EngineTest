@@ -1,13 +1,21 @@
 package cruciblegaming.net;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
+ * TASK: Given the following reels describing a 5-reel, 3-high slot game, paylines and win table,
+ * set up an engine which on each spin sets each reel to a random position and evaluates each payline for wins
+ * of 2, 3, 4, and 5 of a kind.
+ * TODO: Deal with any compiler warnings.
  * TODO: What would you do to make this code more readable?
- * TODO: Note any bugfixes made
- * TODO: Stretch target: Convert primitives to Generics
- * TODO: Stretch target: Employ java streams
+ * TODO: Consider making sWinString into a useful class.
+ * TODO: Stretch target 1: Use symbolID 10 a WILD symbol which can substitute for any other.
+ * TODO: Stretch target 2: If three WILD symbols land anywhere in the display on the first spin only, award 5 free spins.
+ * TODO: Stretch target 3: Convert primitives to Generics
+ * TODO: Stretch target 4: Employ java streams
  */
 public class ReelsGame {
+    private Random m_cRng = new Random(123);
 
     private int[][] Reels = {
             {0, 2, 3, 1, 5, 8, 0, 6, 1, 2, 4, 1, 0, 10, 2, 5, 4, 7, 6, 8, 1, 7, 2, 9, 4, 2, 0, 3, 4, 5, 0, 8, 4, 0, 3, 6, 1, 2, 10, 6, 8, 1, 2, 9, 4, 2, 1, 3, 4, 0, 9, 3, 0, 4, 3, 0, 1, 1, 0, 2, 3, 4, 2, 3, 4, 2, 1, 3, 7, 0, 3, 1, 2, 3, 0, 1, 5},
@@ -40,11 +48,12 @@ public class ReelsGame {
             {0, 5, 40, 400, 2000},
             {0, 5, 40, 400, 2000},
             {0, 10, 100, 1000, 5000},
-            {0, 0, 20, 200, 2000}
+            {0, 0, 0, 0, 10000}
     };
     private int[][] Display = new int[5][3];
-    private int[] m_nStops = new int[5];
-    private Random m_cRng = new Random(123);
+
+    int WILD = 10;
+    int SCATTER = 10;
 
     /**
      * Response string is optional. Feel free to change from String to something more useful if required.
@@ -54,34 +63,50 @@ public class ReelsGame {
     public String playGame() {
         String sWinString = "";
 
-        // Decide where the reels are going to stop
-        for (int i = 0; i < 5; i++) {
-            m_nStops[i] = m_cRng.nextInt(Reels[i].length);
-        }
+        int numberOfPlays = 1;
 
-        // Build a display
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 3; j++) {
-                Display[i][j] = Reels[i][(m_nStops[i] + j)%Reels[i].length];
-            }
-        }
+        for(int play=0; play<numberOfPlays; play++) {
 
-//        PrintDisplay();
-
-        // TODO: Use Symbol '10' as a WILD symbol and re-run
-        for (int[] payline : PayLines) {
-            // Example:
-            int count = 0;
-            int startSymbol = Display[0][payline[0]];
-            for (count = 0; count < payline.length; count++) {
-                if (Display[count][payline[count]] != startSymbol) {
-                    break;
+            // Build a display
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 3; j++) {
+                    Display[i][j] = Reels[i][(m_cRng.nextInt(Reels[i].length) + j) % Reels[i].length];
                 }
             }
-            int win = PayTable[startSymbol][count - 1];
-            if (win > 0) {
-                // TODO: Refactor this win data into a more useful class
-                sWinString += startSymbol + "," + count + "," + win + "&";
+
+            // Add freespins
+            if(numberOfPlays == 1){
+                int wildcount = Math.toIntExact(Arrays.stream(Display)
+                        .flatMapToInt(Arrays::stream)
+                        .filter(num -> num == SCATTER)
+                        .count());
+                numberOfPlays = wildcount >= 3 ? 11 : 1;
+            }
+
+            // Evaluate winlines
+            for (int[] payline : PayLines) {
+                // Example:
+                int count = 0;
+                int[] symbolsOnWinline = new int[5];
+                int paySymbol = WILD;
+                for (int i = 0; i < 5; i++) {
+                    symbolsOnWinline[i] = Display[i][payline[i]];
+                    if (paySymbol == WILD) {
+                        if (symbolsOnWinline[i] != WILD) {
+                            paySymbol = symbolsOnWinline[i];
+                        }
+                    }
+                }
+
+                for (count = 0; count < payline.length; count++) {
+                    if (Display[count][payline[count]] != paySymbol && Display[count][payline[count]] != WILD) {
+                        break;
+                    }
+                }
+                int win = PayTable[paySymbol][count - 1];
+                if (win > 0) {
+                    sWinString += paySymbol + "," + count + "," + win + "&";
+                }
             }
         }
 
