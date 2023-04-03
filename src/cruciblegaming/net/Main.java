@@ -1,10 +1,5 @@
 package cruciblegaming.net;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
-
 public class Main {
     /**
      * TODO: Run game 1m times and collect statistics:
