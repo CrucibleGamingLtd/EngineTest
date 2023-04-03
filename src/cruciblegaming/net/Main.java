@@ -16,8 +16,9 @@ public class Main {
         ReelsGame reelsGame = new ReelsGame();
 
         // Loop 1m games
-        for(int i=0;i<1000000;i++){
+        for(int i=0; i<1000000; i++){
             String sWinString = reelsGame.playGame();
+            // ...
         }
 
         // Printout here

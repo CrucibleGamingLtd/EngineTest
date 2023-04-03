@@ -55,7 +55,21 @@ public class ReelsGame {
      * @return some data
      */
     public String playGame() {
-        return "";
+        // To hold results
+        String sWinString = "";
+
+        // Build a 5x3 display for evaluation
+        for(int i=0; i<Reels.length; i++){
+            // TODO
+        }
+
+        // Evaluate what's on the winlines
+        for(int[] payline : PayLines){
+            // TODO
+        }
+
+        //
+        return sWinString;
     }
 
 
