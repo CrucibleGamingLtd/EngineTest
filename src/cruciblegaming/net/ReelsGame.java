@@ -1,5 +1,4 @@
 package cruciblegaming.net;
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -50,78 +49,13 @@ public class ReelsGame {
             {0, 10, 100, 1000, 5000},
             {0, 0, 0, 0, 10000}
     };
-    private int[][] Display = new int[5][3];
-
-    int WILD = 10;
-    int SCATTER = 10;
 
     /**
      * Response string is optional. Feel free to change from String to something more useful if required.
-     *
-     * @return
+     * @return some data
      */
     public String playGame() {
-        String sWinString = "";
-
-        int numberOfPlays = 1;
-
-        for(int play=0; play<numberOfPlays; play++) {
-
-            // Build a display
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 3; j++) {
-                    Display[i][j] = Reels[i][(m_cRng.nextInt(Reels[i].length) + j) % Reels[i].length];
-                }
-            }
-
-            // Add freespins
-            if(numberOfPlays == 1){
-                int wildcount = Math.toIntExact(Arrays.stream(Display)
-                        .flatMapToInt(Arrays::stream)
-                        .filter(num -> num == SCATTER)
-                        .count());
-                numberOfPlays = wildcount >= 3 ? 11 : 1;
-            }
-
-            // Evaluate winlines
-            for (int[] payline : PayLines) {
-                // Example:
-                int count = 0;
-                int[] symbolsOnWinline = new int[5];
-                int paySymbol = WILD;
-                for (int i = 0; i < 5; i++) {
-                    symbolsOnWinline[i] = Display[i][payline[i]];
-                    if (paySymbol == WILD) {
-                        if (symbolsOnWinline[i] != WILD) {
-                            paySymbol = symbolsOnWinline[i];
-                        }
-                    }
-                }
-
-                for (count = 0; count < payline.length; count++) {
-                    if (Display[count][payline[count]] != paySymbol && Display[count][payline[count]] != WILD) {
-                        break;
-                    }
-                }
-                int win = PayTable[paySymbol][count - 1];
-                if (win > 0) {
-                    sWinString += paySymbol + "," + count + "," + win + "&";
-                }
-            }
-        }
-
-        return sWinString;
-    }
-
-    private void PrintDisplay() {
-        System.out.println(System.lineSeparator() + "Reels:");
-        for (int row = 0; row < 3; row++) {
-            String sMsg = "";
-            for (int col = 0; col < 5; col++) {
-                sMsg += Display[col][row] + ",";
-            }
-            System.out.println(sMsg.substring(0, sMsg.length() - 1));
-        }
+        return "";
     }
 
 
