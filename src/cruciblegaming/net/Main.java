@@ -1,26 +1,38 @@
 package cruciblegaming.net;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
-    // Main shouldn't do much; just instantiate a game
+    /**
+     * TODO: Run game 1m times and collect statistics:
+     *          total amounts spent and won
+     *          RTP (what percentage of the total cost do you win back)
+     *          Average value of a win
+     *          Percentage of winning spins
+     *          Print to console in a readable format
+     *          How many wins for each symbol, and of what length (i.e. 3,4 or 5 of a kind)
+     * @param args String[]
+     */
     public static void main(String[] args) {
         ReelsGame reelsGame = new ReelsGame();
-        double bet = 10;
+        int bet = 10;
         double totWin = 0;
         double totCost = 0;
+        double winSpins = 0;
         HashMap<String, HashMap<String,Integer>> wins = new HashMap<>();
 
         for(int i=0;i<1000000;i++){
             totCost += bet;
 
-            String winstr = reelsGame.playGame();
-            if(!winstr.equals("")) {
-                String windata[] = winstr.split("&");
-                for (int w = 0; w < windata.length; w++) {
-                    String[] data = windata[w].split(",");
+            String sWinString = reelsGame.playGame();
+            if(!sWinString.equals("")) {
+                ++winSpins;
+                String sWinData[] = sWinString.split("&");
+                for (String sWinDatum : sWinData) {
+                    String[] data = sWinDatum.split(",");
                     String symbolID = data[0];
                     String oak = data[1];
                     totWin += Integer.parseInt(data[2]);
@@ -38,16 +50,20 @@ public class Main {
             }
         }
 
+        // Printout
         for(Map.Entry<String, HashMap<String, Integer>> t : wins.entrySet()){
             System.out.println("Symbol " + t.getKey());
             for(Map.Entry<String, Integer> hits : t.getValue().entrySet()){
                 System.out.println(hits.getKey() + " oak: " + hits.getValue() + " hits");
             }
         }
+        DecimalFormat df = new DecimalFormat("#.###");
         System.out.println("");
-        System.out.println("Total cost: " + totCost);
-        System.out.println("Total win: " + totWin);
-        System.out.println("RTP: " + totWin/totCost*100 + "%");
-        System.out.println("Balance: " + (totWin-totCost));
+        System.out.println("Winning spin pc: " + df.format(winSpins/10000) + "%");
+        System.out.println("Average win: " + df.format(totWin/1000000));
+        System.out.printf("Total cost: £%.0f" + System.lineSeparator(), totCost/100);
+        System.out.printf("Total win: £%.0f" + System.lineSeparator(), totWin/100);
+        System.out.println("RTP: " + df.format(totWin/totCost*100) + "%");
+        System.out.printf("Balance: £%.0f", (totWin-totCost)/100);
     }
 }

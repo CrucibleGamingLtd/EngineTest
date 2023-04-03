@@ -2,17 +2,10 @@ package cruciblegaming.net;
 import java.util.Random;
 
 /**
- * TODO: Check payouts involving WILD symbol
  * TODO: What would you do to make this code more readable?
- * TODO: Run game 10,000 times and collect statistics:
- *          total amounts spent and won
- *          RTP (what percentage of the total cost do you win back)
- *          Average value of a win
- *          Print to console in a readable format
  * TODO: Note any bugfixes made
- * TODO: Convert primitives to Generics
- * TODO: How many wins for each symbol, and of what length (i.e. 3,4 or 5 of a kind)
- * TODO: Use streams
+ * TODO: Stretch target: Convert primitives to Generics
+ * TODO: Stretch target: Employ java streams
  */
 public class ReelsGame {
 
