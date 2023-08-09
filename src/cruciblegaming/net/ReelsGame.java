@@ -2,21 +2,12 @@ package cruciblegaming.net;
 import java.util.Arrays;
 import java.util.Random;
 
-/**
- * TASK: Given the following reels describing a 5-reel, 3-high slot game, paylines and win table,
- * set up an engine which on each spin sets each reel to a random position and evaluates each payline for wins
- * of 2, 3, 4, and 5 of a kind.
- * TODO: Deal with any compiler warnings.
- * TODO: What would you do to make this code more readable?
- * TODO: Consider making sWinString into a useful class.
- * TODO: Stretch target 1: Use symbolID 10 a WILD symbol which can substitute for any other.
- * TODO: Stretch target 2: If three WILD symbols land anywhere in the display on the first spin only, award 5 free spins.
- * TODO: Stretch target 3: Convert primitives to Generics
- * TODO: Stretch target 4: Employ java streams
- */
 public class ReelsGame {
     private Random m_cRng = new Random(123);
 
+    /**
+     * Each of these numbers represents the relevant symbol
+     */
     private int[][] Reels = {
             {0, 2, 3, 1, 5, 8, 0, 6, 1, 2, 4, 1, 0, 10, 2, 5, 4, 7, 6, 8, 1, 7, 2, 9, 4, 2, 0, 3, 4, 5, 0, 8, 4, 0, 3, 6, 1, 2, 10, 6, 8, 1, 2, 9, 4, 2, 1, 3, 4, 0, 9, 3, 0, 4, 3, 0, 1, 1, 0, 2, 3, 4, 2, 3, 4, 2, 1, 3, 7, 0, 3, 1, 2, 3, 0, 1, 5},
             {0, 3, 5, 4, 2, 0, 5, 1, 0, 10, 4, 2, 3, 1, 0, 6, 1, 4, 0, 3, 5, 10, 2, 1, 6, 2, 8, 1, 3, 8, 6, 1, 0, 4, 3, 5, 1, 9, 0, 1, 3, 0, 4, 9, 3, 2, 0, 7, 1, 3, 4, 7, 2, 3, 0, 7, 2, 3, 0, 4, 2, 5, 4, 7, 0, 2, 7, 1, 2, 9, 4, 5, 1, 4, 8, 2, 1},
@@ -24,6 +15,15 @@ public class ReelsGame {
             {0, 5, 2, 4, 8, 2, 1, 2, 5, 1, 10, 3, 1, 2, 5, 4, 3, 7, 2, 1, 6, 3, 0, 7, 1, 2, 3, 10, 5, 2, 0, 4, 3, 6, 4, 7, 0, 3, 6, 0, 1, 9, 4, 2, 3, 5, 2, 4, 6, 0, 1, 8, 0, 4, 7, 1, 0, 9, 2, 5, 1, 0, 8, 1, 0, 6, 4, 2, 8, 0, 1, 2, 6, 1, 0, 3, 5},
             {0, 3, 6, 1, 4, 8, 2, 0, 4, 5, 10, 0, 2, 6, 1, 2, 9, 4, 10, 3, 7, 1, 0, 6, 4, 0, 2, 7, 0, 3, 2, 5, 4, 1, 0, 6, 7, 1, 0, 8, 3, 2, 1, 3, 4, 7, 1, 3, 6, 2, 5, 0, 1, 3, 8, 0, 2, 9, 4, 2, 1, 4, 5, 2, 8, 3, 0, 6, 1, 2, 5, 0, 1, 5, 2, 1, 3}
     };
+
+    /**
+    * Example:
+    * In the following display there are five "Ace" symbols on winline 5
+    * and 4 "Double Bar" symbols on winline 8
+    * 8, 4, 4, 4, 0
+    * 4, 6, 7, 2, 4
+    * 7, 7, 2, 7, 3
+    */
     private int[][] PayLines = {
             {0, 0, 0, 0, 0},
             {1, 1, 1, 1, 1},
@@ -33,96 +33,54 @@ public class ReelsGame {
             {1, 0, 0, 0, 1},
             {1, 2, 2, 2, 1},
             {0, 0, 1, 2, 2},
-            {2, 2, 1, 0, 0},
+            {2, 2, 1, 2, 2},
             {1, 2, 1, 0, 1},
     };
 
+    private String[] symbolNames = {"Ten","Jack","Queen","King","Ace","Bell","Bar","Double Bar","Star","Wild","Scatter"};
     private int[][] PayTable = {
-            {0, 0, 5, 25, 100},
-            {0, 0, 5, 25, 100},
-            {0, 0, 5, 25, 100},
-            {0, 0, 5, 40, 150},
-            {0, 0, 5, 40, 150},
-            {0, 5, 30, 100, 750},
-            {0, 5, 30, 100, 750},
-            {0, 5, 40, 400, 2000},
-            {0, 5, 40, 400, 2000},
-            {0, 10, 100, 1000, 5000},
-            {0, 0, 0, 0, 10000}
+            {0, 0, 5, 10, 25},
+            {0, 0, 5, 10, 25},
+            {0, 0, 10, 25, 50},
+            {0, 0, 10, 25, 50},
+            {0, 0, 25, 50, 100},
+            {0, 5, 30, 50, 150},
+            {0, 5, 30, 50, 150},
+            {0, 10, 40, 100, 200},
+            {0, 50, 100, 500, 2000},
+            {0, 50, 100, 500, 2000},
+            {0, 0, 100, 10000, 50000}
     };
     private int[][] Display = new int[5][3];
 
-    int WILD = 10;
+    int WILD = 9;
     int SCATTER = 10;
 
-    /**
-     * Response string is optional. Feel free to change from String to something more useful if required.
-     *
-     * @return
-     */
     public String playGame() {
-        String sWinString = "";
 
+        String sResultsString = "";
+
+        // Set number of plays
         int numberOfPlays = 1;
 
+        // Run game
         for(int play=0; play<numberOfPlays; play++) {
 
             // Build a display
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 3; j++) {
-                    Display[i][j] = Reels[i][(m_cRng.nextInt(Reels[i].length) + j) % Reels[i].length];
-                }
-            }
-
-            // Add freespins
-            if(numberOfPlays == 1){
-                int wildcount = Math.toIntExact(Arrays.stream(Display)
-                        .flatMapToInt(Arrays::stream)
-                        .filter(num -> num == SCATTER)
-                        .count());
-                numberOfPlays = wildcount >= 3 ? 6 : 1;
-            }
+            // ...
 
             // Evaluate winlines
-            for (int[] payline : PayLines) {
-                // Example:
-                int count = 0;
-                int[] symbolsOnWinline = new int[5];
-                int paySymbol = WILD;
-                for (int i = 0; i < 5; i++) {
-                    symbolsOnWinline[i] = Display[i][payline[i]];
-                    if (paySymbol == WILD) {
-                        if (symbolsOnWinline[i] != WILD) {
-                            paySymbol = symbolsOnWinline[i];
-                        }
-                    }
-                }
+            // ...
 
-                for (count = 0; count < payline.length; count++) {
-                    if (Display[count][payline[count]] != paySymbol && Display[count][payline[count]] != WILD) {
-                        break;
-                    }
-                }
-                int win = PayTable[paySymbol][count - 1];
-                if (win > 0) {
-                    sWinString += paySymbol + "," + count + "," + win + "&";
-                }
-            }
+            // Construct a results string
+            // ...
+
+            // Output spin results to console
+            // ...
+
         }
 
-        return sWinString;
+        return sResultsString;
     }
-
-    private void PrintDisplay() {
-        System.out.println(System.lineSeparator() + "Reels:");
-        for (int row = 0; row < 3; row++) {
-            String sMsg = "";
-            for (int col = 0; col < 5; col++) {
-                sMsg += Display[col][row] + ",";
-            }
-            System.out.println(sMsg.substring(0, sMsg.length() - 1));
-        }
-    }
-
 
 }
