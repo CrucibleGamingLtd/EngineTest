@@ -31,6 +31,7 @@ There is no right or wrong way to get to the result.
 3. Parsing a String to an Integer
 
 ## Describe
-1. Name the git commands you find the most useful apart from Add, commit, push
-2. What do you consider to be the most useful aspect of Object Orientation?
-3. What do you consider to be the worst aspect of Object Orientation? 
+1. Name the git commands you find the most useful apart from add, commit, push
+2. What are the main benefits of using git?
+3. What do you consider to be the most useful aspect of Object Orientation?
+4. What do you consider to be the worst aspect of Object Orientation? 
